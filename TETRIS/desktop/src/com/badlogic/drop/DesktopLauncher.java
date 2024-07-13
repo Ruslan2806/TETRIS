@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setWindowedMode(476, 900); // установка фиксированного размера окна
-		//config.setResizable(false); // запрет на изменение размеров окна
+		config.setResizable(false); // запрет на изменение размеров окна
 		config.setTitle("TETRIS");
 		new Lwjgl3Application(new Tetris(), config);
 	}

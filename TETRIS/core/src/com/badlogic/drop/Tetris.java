@@ -35,6 +35,7 @@ public class Tetris extends ApplicationAdapter {
     private static final int BOARD_WIDTH = 10; // ширина игрового поля в плитках
     private static final int BOARD_HEIGHT = 20; // высота игрового поля в плитках
     private static final int TILE_SIZE = 34; // размер одной плитки в пикселях
+    private int indCurrentTile = 3; // индекс текущей плитки (соответствует форме)
 
     @Override
     public void create() {
@@ -45,15 +46,10 @@ public class Tetris extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         tile = new Array<Rectangle>(4);
-        int n = 5;
+        //    int n = 3;
         for (int i = 0; i < 4; i++) {
-            tile.add(new Rectangle(BOARD_WIDTH / 2 - figures[n][i] % 2, BOARD_HEIGHT + figures[n][i] / 2, TILE_SIZE, TILE_SIZE));
+            tile.add(new Rectangle(BOARD_WIDTH / 2 - figures[indCurrentTile][i] % 2, BOARD_HEIGHT + figures[indCurrentTile][i] / 2, TILE_SIZE, TILE_SIZE));
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
     }
 
     @Override
@@ -68,6 +64,7 @@ public class Tetris extends ApplicationAdapter {
         }
         batch.end();
 
+        rotateTile();
         fallTile();
         handleInput();
     }
@@ -80,6 +77,21 @@ public class Tetris extends ApplicationAdapter {
                 lastFallTime = currentTime;
             }
         }
+    }
+
+    private boolean wasUpPressed = false;
+    private void rotateTile() {
+        boolean isUpPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
+        if (isUpPressed && !wasUpPressed) {
+            Rectangle p = tile.get(indCurrentTile);
+            for (int i = 0; i < 4; i++) {
+                int x = (int) (tile.get(i).y - p.y);
+                int y = (int) (tile.get(i).x - p.x);
+                tile.get(i).x = p.x - x;
+                tile.get(i).y = p.y + y;
+            }
+        }
+        wasUpPressed = isUpPressed;
     }
 
     private void handleInput() {
