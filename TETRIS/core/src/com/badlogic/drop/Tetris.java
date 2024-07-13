@@ -88,7 +88,6 @@ public class Tetris extends ApplicationAdapter {
 	}
 
 	private void moveTiles(int direction) {
-
 		boolean screenBorder = false;
 		for (Rectangle r : tile) {
 			if (r.x + direction < 0 || r.x + direction >= BOARD_WIDTH) {
