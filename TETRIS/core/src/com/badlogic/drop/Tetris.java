@@ -45,7 +45,7 @@ public class Tetris extends ApplicationAdapter {
 		tile = new Array<Rectangle>(4);
 		int n = 3;
 		for (int i = 0; i < 4; i++) {
-			tile.add(new Rectangle(figures[n][i] % 2, figures[n][i] / 2, TILE_SIZE, TILE_SIZE));
+			tile.add(new Rectangle(BOARD_WIDTH/2 - figures[n][i] % 2, BOARD_HEIGHT - figures[n][i] / 2, TILE_SIZE, TILE_SIZE));
 		}
 	}
 
