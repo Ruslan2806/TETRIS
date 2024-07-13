@@ -35,7 +35,7 @@ public class Tetris extends ApplicationAdapter {
     private static final int BOARD_WIDTH = 10; // ширина игрового поля в плитках
     private static final int BOARD_HEIGHT = 20; // высота игрового поля в плитках
     private static final int TILE_SIZE = 34; // размер одной плитки в пикселях
-    private int indCurrentTile = 3; // индекс текущей плитки (соответствует форме)
+    private int indCurrentTile = 5; // индекс текущей плитки (соответствует форме)
 
     @Override
     public void create() {
@@ -83,7 +83,7 @@ public class Tetris extends ApplicationAdapter {
     private void rotateTile() {
         boolean isUpPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
         if (isUpPressed && !wasUpPressed) {
-            Rectangle p = tile.get(indCurrentTile);
+            Rectangle p = tile.get(1);
             for (int i = 0; i < 4; i++) {
                 int x = (int) (tile.get(i).y - p.y);
                 int y = (int) (tile.get(i).x - p.x);
