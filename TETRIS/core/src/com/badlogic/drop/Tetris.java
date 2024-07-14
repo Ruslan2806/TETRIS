@@ -54,9 +54,9 @@ public class Tetris extends ApplicationAdapter {
         numberOfColor = random.nextInt(5);
         tileImage = new Texture[style1.length];
         for (int i = 0; i < style1.length; i++)
-            tileImage[i] = new Texture(Gdx.files.internal(style1[i]));
+            tileImage[i] = new Texture(Gdx.files.internal(style2[i]));
         currentTileImage = tileImage[numberOfColor];
-        fieldImage = new Texture(Gdx.files.internal("field2.png"));
+        fieldImage = new Texture(Gdx.files.internal("field1.png"));
         camera = new OrthographicCamera();
         viewport = new FitViewport(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE, camera);
         camera.setToOrtho(false, BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
@@ -143,7 +143,7 @@ public class Tetris extends ApplicationAdapter {
         float currentTime = TimeUtils.nanoTime() / 1_000_000_000.0f;
         float currentMoveDelay = moveDelayForFall;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             currentMoveDelay = moveDelayForFall / 20;
         }
 
@@ -179,8 +179,8 @@ public class Tetris extends ApplicationAdapter {
     }
 
     private void rotateTile() {
-        boolean isUpPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
-        if (isUpPressed && !wasUpPressed) {
+        boolean isUpPressed = Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W);
+        if ((isUpPressed) && !wasUpPressed) {
             Array<Rectangle> rotatedTile = new Array<>(4);
             Rectangle p = tile.get(1);
             for (int i = 0; i < 4; i++) {
@@ -210,14 +210,14 @@ public class Tetris extends ApplicationAdapter {
     private void handleInput() {
         float currentTime = TimeUtils.nanoTime() / 1_000_000_000.0f; // текущее время в секундах
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (currentTime - lastMoveTime >= moveDelay) {
                 moveTiles(1);
                 lastMoveTime = currentTime;
             }
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (currentTime - lastMoveTime >= moveDelay) {
                 moveTiles(-1);
                 lastMoveTime = currentTime;
