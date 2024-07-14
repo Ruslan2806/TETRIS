@@ -54,9 +54,9 @@ public class Tetris extends ApplicationAdapter {
         numberOfColor = random.nextInt(5);
         tileImage = new Texture[style1.length];
         for (int i = 0; i < style1.length; i++)
-            tileImage[i] = new Texture(Gdx.files.internal(style2[i]));
+            tileImage[i] = new Texture(Gdx.files.internal(style1[i]));
         currentTileImage = tileImage[numberOfColor];
-        fieldImage = new Texture(Gdx.files.internal("field1.png"));
+        fieldImage = new Texture(Gdx.files.internal("field2.png"));
         camera = new OrthographicCamera();
         viewport = new FitViewport(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE, camera);
         camera.setToOrtho(false, BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
@@ -94,11 +94,39 @@ public class Tetris extends ApplicationAdapter {
         for (Rectangle r : tile) {
             batch.draw(currentTileImage, r.x * TILE_SIZE, r.y * TILE_SIZE);
         }
-
         batch.end();
+
+        removeFullRows();
         rotateTile();
         fallTile();
         handleInput();
+    }
+
+    private void removeFullRows() {
+        for (int y = 0; y < BOARD_HEIGHT; y++) {
+            boolean fullRow = true;
+
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                if (checkfield[x][y] == -1) {
+                    fullRow = false;
+                    break;
+                }
+            }
+
+            if (fullRow) {
+                for (int yy = y; yy < BOARD_HEIGHT - 1; yy++) {
+                    for (int x = 0; x < BOARD_WIDTH; x++) {
+                        checkfield[x][yy] = checkfield[x][yy + 1];
+                    }
+                }
+
+                for (int x = 0; x < BOARD_WIDTH; x++) {
+                    checkfield[x][BOARD_HEIGHT - 1] = -1;
+                }
+
+                y--;
+            }
+        }
     }
 
     private boolean check() {
@@ -132,6 +160,7 @@ public class Tetris extends ApplicationAdapter {
             }
             lastFallTime = currentTime;
         }
+
     }
 
 
