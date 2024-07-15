@@ -5,6 +5,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,6 +23,8 @@ public class Tetris extends ApplicationAdapter {
     private Texture[] tileImage;
     private Texture currentTileImage;
     private Texture fieldImage;
+    private Sound dropSound;
+    private Sound rowFull;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -56,7 +59,11 @@ public class Tetris extends ApplicationAdapter {
         for (int i = 0; i < style1.length; i++)
             tileImage[i] = new Texture(Gdx.files.internal(style2[i]));
         currentTileImage = tileImage[numberOfColor];
-        fieldImage = new Texture(Gdx.files.internal("field1.png"));
+        fieldImage = new Texture(Gdx.files.internal("field2.png"));
+
+        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
+        rowFull  = Gdx.audio.newSound(Gdx.files.internal("rowfull.wav"));
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE, camera);
         camera.setToOrtho(false, BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
@@ -69,12 +76,9 @@ public class Tetris extends ApplicationAdapter {
             for (int j = 0; j < BOARD_HEIGHT; j++)
                 checkfield[i][j] = -1;
 
-        createNewTile();
-    }
 
-    public static String getRandomElement(String[] array) {
-        int index = random.nextInt(array.length);
-        return array[index];
+
+        createNewTile();
     }
 
     @Override
@@ -114,6 +118,7 @@ public class Tetris extends ApplicationAdapter {
             }
 
             if (fullRow) {
+                rowFull.play();
                 for (int yy = y; yy < BOARD_HEIGHT - 1; yy++) {
                     for (int x = 0; x < BOARD_WIDTH; x++) {
                         checkfield[x][yy] = checkfield[x][yy + 1];
@@ -152,6 +157,7 @@ public class Tetris extends ApplicationAdapter {
                 r.y -= 1;
             }
             if (!check()) {
+                dropSound.play();
                 for (Rectangle r : tile) {
                     r.y += 1;
                     checkfield[(int) r.x][(int) r.y] = numberOfColor;
@@ -163,8 +169,8 @@ public class Tetris extends ApplicationAdapter {
 
     }
 
-
     private void createNewTile() {
+
         tile.clear();
         numberOfColor = random.nextInt(5);
         currentTileImage = tileImage[numberOfColor];
@@ -245,5 +251,7 @@ public class Tetris extends ApplicationAdapter {
         batch.dispose();
         for (Texture t : tileImage)
             t.dispose();
+        dropSound.dispose();
     }
+
 }
